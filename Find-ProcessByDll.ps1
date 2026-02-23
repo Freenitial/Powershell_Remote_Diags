@@ -278,3 +278,4 @@ public static class Win32Api {
 
 
 Find-ProcessByDll -DllPatterns $DllPatterns -ComputerNames $ComputerNames -Credential $Credential -MaxThreads $MaxThreads -SortingTimeout $SortingTimeout
+Read-Host
