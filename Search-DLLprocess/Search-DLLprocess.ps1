@@ -11,7 +11,7 @@ function Search-DLLprocess {
     <#
     .SYNOPSIS
         Author  : Leo Gillet / Freenitial on GitHub
-        Version : v1.2
+        Version : v1.2 
         Scan local or remote computers to find which processes loaded
         specific DLLs, or which DLLs a specific process has loaded.
     .PARAMETER Patterns
