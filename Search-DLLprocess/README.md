@@ -101,7 +101,7 @@ Search-DLLprocess bcrypt.dll PC01,PC02
 **Limit concurrency**
 
 ```powershell
-Search-DLLprocess ntdll.dll -MaxThreads 4
+Search-DLLprocess ntdll.dll PC01,PC02,PC03,PC04 -MaxThreads 2
 ```
 
 ---
