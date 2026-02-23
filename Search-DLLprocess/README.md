@@ -89,7 +89,7 @@ Maximum time (in seconds) to wait before forcing ordered output.
 
 **Search multiple DLL patterns locally**
 ```powershell
-Search-DLLprocess dbghelp*.dll,api-ms-win-*.dll
+Search-DLLprocess acro*.exe,acro*.dll
 ````
 
 **Scan multiple remote computers**
