@@ -101,7 +101,7 @@ Search-DeviceInfo PC01,PC02,PC03
 
 **Scan with explicit credentials and limited threads**
 ```powershell
-Search-DeviceInfo 192.168.1.10,192.168.1.11 -MaxThreads 4
+Search-DeviceInfo PC-01,192.168.1.10,PC-02,192.168.1.11 -MaxThreads 2
 ```
 
 ---
