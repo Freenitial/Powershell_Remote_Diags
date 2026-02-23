@@ -98,7 +98,7 @@ Search-Software  "Visual C++",Chrome  PC01,PC02
 
 **Limit concurrency**
 ```powershell
-Search-Software  Office  -MaxThreads 4
+Search-Software  Office  PC01,PC02,PC03,PC04  -MaxThreads 2
 ```
 
 ---
