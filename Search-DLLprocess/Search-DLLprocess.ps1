@@ -455,3 +455,7 @@ public static class Win32Api {
 Set-Alias -Name sdll -Value Search-DLLprocess
 
 Search-DLLprocess -Patterns $Patterns -ComputerNames $ComputerNames -Credential $Credential -MaxThreads $MaxThreads -SortingTimeout $SortingTimeout
+$message = "Search Complete. Press Any Key to Exit."
+Write-Host $message -NoNewline
+$null = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+Write-Host ("`r" + (" " * $message.Length) + "`r") -NoNewline
