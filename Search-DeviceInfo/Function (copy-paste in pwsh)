@@ -3,8 +3,7 @@ function Search-DeviceInfo {
     .SYNOPSIS
         Author  : Leo Gillet / Freenitial on GitHub
         Version : v1.0
-        Gather system information and logged-on user sessions
-        from local or remote computers.
+        Gather system information and logged-on user sessions, local or remote.
     .PARAMETER ComputerNames
         Optional. Array of computer names to scan. Defaults to the
         current machine. Uses port 445 (SMB) to test connectivity
@@ -174,6 +173,8 @@ public static class WtsNativeApi {
                         if ($Components[$i].Value -gt 0) { if ($FirstIndex -eq -1) { $FirstIndex = $i } ; $LastIndex = $i }
                     }
                     if ($FirstIndex -eq -1) { return '-' }
+                    # Drop seconds when duration includes days to keep output compact
+                    if ($TotalDays -gt 0 -and $LastIndex -eq 3) { $LastIndex = 2 }
                     $Parts = New-Object System.Collections.ArrayList
                     for ($i = $FirstIndex; $i -le $LastIndex; $i++) {
                         $ValuePart = if ($i -eq $FirstIndex) { $Components[$i].Value } else { '{0:00}' -f $Components[$i].Value }
@@ -250,7 +251,11 @@ public static class WtsNativeApi {
                                 if ($WtsInfo.WinStationName -and $WtsInfo.WinStationName.Trim()) { $SessionName = $WtsInfo.WinStationName.Trim() }
                                 if ($WtsInfo.State -ge 0 -and $WtsInfo.State -lt $StateNames.Count) { $StateName = $StateNames[$WtsInfo.State] }
                                 if ($WtsInfo.LastInputTime -gt 0 -and $WtsInfo.CurrentTime -gt 0 -and $WtsInfo.CurrentTime -gt $WtsInfo.LastInputTime) {
-                                    $IdleDisplay = Format-Duration -Duration ([TimeSpan]::FromTicks($WtsInfo.CurrentTime - $WtsInfo.LastInputTime))
+                                    $IdleTicks   = $WtsInfo.CurrentTime - $WtsInfo.LastInputTime
+                                    $SessionTicks = if ($WtsInfo.LogonTime -gt 0 -and $WtsInfo.CurrentTime -gt $WtsInfo.LogonTime) { $WtsInfo.CurrentTime - $WtsInfo.LogonTime } else { 0 }
+                                    # Idle cannot logically exceed session duration. Sometimes WTS API reports wrong IDLE values.
+                                    if ($SessionTicks -gt 0 -and $IdleTicks -gt $SessionTicks) { $IdleDisplay = '-' }
+                                    else { $IdleDisplay = Format-Duration -Duration ([TimeSpan]::FromTicks($IdleTicks)) }
                                 }
                                 if ($WtsInfo.LogonTime -gt 0 -and $WtsInfo.CurrentTime -gt 0 -and $WtsInfo.CurrentTime -gt $WtsInfo.LogonTime) {
                                     $OpenedDisplay = Format-Duration -Duration ([TimeSpan]::FromTicks($WtsInfo.CurrentTime - $WtsInfo.LogonTime))
@@ -461,9 +466,9 @@ public static class WtsNativeApi {
                             $DynamicColumns = @(
                                 @{ Header = 'User';    Width = $UserColumnWidth }
                                 @{ Header = 'Session'; Width = 14 }
-                                @{ Header = 'State';   Width = 14 }
-                                @{ Header = 'Idle';    Width = 14 }
-                                @{ Header = 'Opened';  Width = 14 }
+                                @{ Header = 'State';   Width = 12 }
+                                @{ Header = 'Idle';    Width = 13 }
+                                @{ Header = 'Opened';  Width = 13 }
                             )
                             $RowFormatString = "  {0,-$($DynamicColumns[0].Width)}{1,-$($DynamicColumns[1].Width)}{2,-$($DynamicColumns[2].Width)}{3,-$($DynamicColumns[3].Width)}{4,-$($DynamicColumns[4].Width)}"
                             Write-Host ($RowFormatString -f $DynamicColumns[0].Header, $DynamicColumns[1].Header, $DynamicColumns[2].Header, $DynamicColumns[3].Header, $DynamicColumns[4].Header) -ForegroundColor DarkCyan
