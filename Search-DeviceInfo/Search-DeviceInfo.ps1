@@ -503,4 +503,7 @@ public static class WtsNativeApi {
 Set-Alias -Name sdev -Value Search-DeviceInfo
 
 Search-DeviceInfo -ComputerNames $ComputerNames -Credential $Credential -MaxThreads $MaxThreads -SortingTimeout $SortingTimeout
-Read-Host
+$message = "Search Complete. Press Any Key to Exit."
+Write-Host $message -NoNewline
+$null = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+Write-Host ("`r" + (" " * $message.Length) + "`r") -NoNewline
