@@ -1,5 +1,5 @@
 <# ::
-    @echo off & setlocal
+    @echo off & setlocal 
     title Search-DLLprocess v1.2
     
     if exist %SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe   set "powershell=%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe"
