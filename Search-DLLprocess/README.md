@@ -38,13 +38,13 @@ Also available as .ps1 or .bat
 ## 🔧 Parameters
 
 ### `-Patterns <string[]>` (mandatory)
-One or more wildcard patterns describing DLLs to search for.
+One or more wildcard patterns describing DLL/EXE to search for.
 
 Accepted forms:
 * Filename only  
   `bcrypt.dll`,`chrome.exe`
 * Full or partial path with wildcards  
-  `C:\Windows\System32\api-ms-win-*.dll`
+  `C:\Windows\*\api-*.dll`,`Acro*.exe`
 
 Matching logic automatically switches between filename-only and full-path mode.
 
